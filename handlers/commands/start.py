@@ -5,37 +5,32 @@ from aiogram.types import Message
 from aiogram import Bot
 
 from codetrack.i18n import LANGUAGES
-from codetrack.i18n import _
+from codetrack import messages
 
 
 async def cmd_start(message: Message, state: FSMContext):
     user = message.from_user
 
-    print("start")
     language_is_set = False
     data = await state.get_data({})
     if "locale" in data:
         language_is_set = True
 
+    markup = InlineKeyboardMarkup()
     if not language_is_set:
-        markup = InlineKeyboardMarkup()
         for language in LANGUAGES[1:]:
             markup.row(InlineKeyboardButton(
                 text=language[0],
                 callback_data=f"set_locale:{language[1]}"
             ))
         markup.row(InlineKeyboardButton(
-            text=_("Continue with English ☑️"),
+            text=messages.BTN_CONTINUE_WITH_ENGLISH,
             callback_data="set_locale:en"
         ))
-        message_text = _("ℹ️ Before starting the bot you can set your interface language:")
+        message_text = messages.MSG_START_NO_LOCALE
 
     else:
-        markup = InlineKeyboardMarkup()
-        message_text = _("""<b>Codetrack</b>
-
-🧑‍💻 Save and share useful code snippets in <b>Telegram</b> completely for <b>free</b>
-                        """)
+        message_text = messages.MSG_START
 
     await Bot.get_current().send_message(
         user.id,

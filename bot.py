@@ -7,7 +7,9 @@ from aiogram import Bot
 import os
 
 from handlers.commands.start import cmd_start
+from handlers.button.to_start import btn_to_start
 from handlers.buttons.set_locale import btn_set_locale
+from handlers.buttons.my_snippets import btn_my_snippets
 
 
 
@@ -26,7 +28,8 @@ dispatcher = Dispatcher(bot, storage=SQLiteStorage(STORAGE_URI))
 dispatcher.middleware.setup(i18n)
 
 dispatcher.register_message_handler(cmd_start, commands=["start"], state="*")
-dispatcher.register_callback_query_handler(btn_set_locale,
-    lambda call: call.data.startswith("set_locale:"), state="*")
+dispatcher.register_callback_query_handler(btn_to_start, lambda call: call.data == "to:start", state="*")
+dispatcher.register_callback_query_handler(btn_set_locale, lambda call: call.data.startswith("set_locale:"), state="*")
+dispatcher.register_callback_query_handler(btn_my_snippets, lambda call: call.data.startswith("my_snippets:"), state="*")
 
 executor.start_polling(dispatcher)

@@ -4,7 +4,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.types import CallbackQuery
 from aiogram import Bot
 
-from codetrack.i18n import _
+from codetrack import messages
 
 
 async def btn_set_locale(call: CallbackQuery, state: FSMContext):
@@ -16,10 +16,8 @@ async def btn_set_locale(call: CallbackQuery, state: FSMContext):
 
 
     markup = InlineKeyboardMarkup()
-    message_text = _("""<b>Codetrack</b>
+    message_text = messages.MSG_START_WITH_LOCALE(locale)
 
-🧑‍💻 Save and share useful code snippets in <b>Telegram</b> completely for <b>free</b>
-                        """, locale=locale)
     await bot.delete_message(call.message.chat.id, call.message.message_id)
     await bot.send_message(
         user.id,
